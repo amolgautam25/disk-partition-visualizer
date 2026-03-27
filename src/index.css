@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #0b1120;
+  color: #e2e8f0;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0b1120;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Number input spinners — hide in Webkit */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type='number'] {
+  -moz-appearance: textfield;
+}
