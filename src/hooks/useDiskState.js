@@ -100,9 +100,17 @@ export default function useDiskState(initialConfig = {}) {
     const parsed = parseInt(blocks);
     if (isNaN(parsed) || parsed < 0) return;
     const newBytes = parsed * sectorSize;
-    const unitMultiplier = SIZE_UNITS[diskSizeUnit] || 1;
-    setDiskSizeValue(String(newBytes / unitMultiplier));
-  }, [sectorSize, diskSizeUnit]);
+    const units = [
+      { label: 'TB', value: SIZE_UNITS.TB },
+      { label: 'GB', value: SIZE_UNITS.GB },
+      { label: 'MB', value: SIZE_UNITS.MB },
+      { label: 'KB', value: SIZE_UNITS.KB },
+      { label: 'B',  value: SIZE_UNITS.B  },
+    ];
+    const best = units.find((u) => newBytes >= u.value) || units[units.length - 1];
+    setDiskSizeUnit(best.label);
+    setDiskSizeValue(String(newBytes / best.value));
+  }, [sectorSize]);
 
   const reset = useCallback(() => {
     setDiskSizeValue(initDiskSize);
