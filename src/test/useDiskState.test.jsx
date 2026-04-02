@@ -108,19 +108,33 @@ describe('useDiskState — reset', () => {
 });
 
 describe('useDiskState — setTotalBlocks', () => {
-  it('updates diskSizeValue when total blocks are set', () => {
+  it('updates diskSizeValue and auto-selects the best unit', () => {
     const { result } = renderHook(() =>
       useDiskState({ diskSize: '500', diskUnit: 'GB', sectorSize: 512, partitions: [] })
     );
 
     act(() => {
-      // 500 GB / 512 B = 976,562,500 blocks → set to 1,000,000 blocks
-      // expected diskSizeValue = (1_000_000 * 512) / 1e9 = 0.512 GB
+      // 1,000,000 blocks * 512 B = 512,000,000 B = 512 MB
       result.current.setTotalBlocks(1_000_000);
     });
 
-    expect(result.current.diskSizeValue).toBe('0.512');
+    expect(result.current.diskSizeUnit).toBe('MB');
+    expect(result.current.diskSizeValue).toBe('512');
     expect(result.current.totalBlocks).toBe(1_000_000);
+  });
+
+  it('uses B unit for very small block counts', () => {
+    const { result } = renderHook(() =>
+      useDiskState({ diskSize: '500', diskUnit: 'GB', sectorSize: 512, partitions: [] })
+    );
+
+    act(() => {
+      // 1 block * 512 B = 512 B
+      result.current.setTotalBlocks(1);
+    });
+
+    expect(result.current.diskSizeUnit).toBe('B');
+    expect(result.current.diskSizeValue).toBe('512');
   });
 
   it('does nothing for invalid input', () => {
