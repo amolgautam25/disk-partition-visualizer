@@ -9,12 +9,6 @@ An interactive, browser-based disk partition visualizer that renders real-time L
 
 ---
 
-## Screenshots
-
-![Disk Partition Visualizer](https://github.com/user-attachments/assets/e79fe236-b6df-4461-918b-224dba6eb998)
-
----
-
 ## Features
 
 - **Configurable disk geometry** — set disk size (B → TB) and sector size (256 → 4096 bytes); total block count computes instantly
