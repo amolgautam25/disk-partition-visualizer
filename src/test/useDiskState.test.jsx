@@ -107,6 +107,46 @@ describe('useDiskState — reset', () => {
   });
 });
 
+describe('useDiskState — setTotalBlocks', () => {
+  it('updates diskSizeValue when total blocks are set', () => {
+    const { result } = renderHook(() =>
+      useDiskState({ diskSize: '500', diskUnit: 'GB', sectorSize: 512, partitions: [] })
+    );
+
+    act(() => {
+      // 500 GB / 512 B = 976,562,500 blocks → set to 1,000,000 blocks
+      // expected diskSizeValue = (1_000_000 * 512) / 1e9 = 0.512 GB
+      result.current.setTotalBlocks(1_000_000);
+    });
+
+    expect(result.current.diskSizeValue).toBe('0.512');
+    expect(result.current.totalBlocks).toBe(1_000_000);
+  });
+
+  it('does nothing for invalid input', () => {
+    const { result } = renderHook(() =>
+      useDiskState({ diskSize: '500', diskUnit: 'GB', sectorSize: 512, partitions: [] })
+    );
+    const before = result.current.diskSizeValue;
+
+    act(() => { result.current.setTotalBlocks('abc'); });
+    expect(result.current.diskSizeValue).toBe(before);
+
+    act(() => { result.current.setTotalBlocks(-1); });
+    expect(result.current.diskSizeValue).toBe(before);
+  });
+
+  it('keeps two-way sync: disk size change updates totalBlocks', () => {
+    const { result } = renderHook(() =>
+      useDiskState({ diskSize: '1', diskUnit: 'GB', sectorSize: 512, partitions: [] })
+    );
+
+    act(() => { result.current.setDiskSizeValue('2'); });
+    // 2 GB / 512 B = 3,906,250 blocks
+    expect(result.current.totalBlocks).toBe(3_906_250);
+  });
+});
+
 describe('Reset button UI', () => {
   it('shows a Reset button', () => {
     render(<App />);

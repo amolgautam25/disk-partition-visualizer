@@ -105,6 +105,7 @@ export default function App() {
           sectorSize={disk.sectorSize}
           setSectorSize={disk.setSectorSize}
           totalBlocks={disk.totalBlocks}
+          setTotalBlocks={disk.setTotalBlocks}
           diskBytes={disk.diskBytes}
           allocatedBlocks={disk.allocatedBlocks}
           freeBlocks={disk.freeBlocks}

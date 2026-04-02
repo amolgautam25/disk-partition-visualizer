@@ -96,6 +96,14 @@ export default function useDiskState(initialConfig = {}) {
     setPartitions(preset.partitions);
   }, []);
 
+  const setTotalBlocks = useCallback((blocks) => {
+    const parsed = parseInt(blocks);
+    if (isNaN(parsed) || parsed < 0) return;
+    const newBytes = parsed * sectorSize;
+    const unitMultiplier = SIZE_UNITS[diskSizeUnit] || 1;
+    setDiskSizeValue(String(newBytes / unitMultiplier));
+  }, [sectorSize, diskSizeUnit]);
+
   const reset = useCallback(() => {
     setDiskSizeValue(initDiskSize);
     setDiskSizeUnit(initDiskUnit);
@@ -129,6 +137,7 @@ export default function useDiskState(initialConfig = {}) {
     updatePartition,
     removePartition,
     loadPreset,
+    setTotalBlocks,
     reset,
   };
 }
