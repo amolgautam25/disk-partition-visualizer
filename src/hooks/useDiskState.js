@@ -96,6 +96,14 @@ export default function useDiskState(initialConfig = {}) {
     setPartitions(preset.partitions);
   }, []);
 
+  const reset = useCallback(() => {
+    setDiskSizeValue(initDiskSize);
+    setDiskSizeUnit(initDiskUnit);
+    setSectorSize(initSectorSize);
+    setPartitions(initPartitions);
+    try { localStorage.removeItem(STORAGE_KEY); } catch {}
+  }, [initDiskSize, initDiskUnit, initSectorSize, initPartitions]);
+
   return {
     // Config state + setters
     diskSizeValue,
@@ -121,5 +129,6 @@ export default function useDiskState(initialConfig = {}) {
     updatePartition,
     removePartition,
     loadPreset,
+    reset,
   };
 }
