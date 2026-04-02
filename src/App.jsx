@@ -24,6 +24,13 @@ const DEFAULT_CONFIG = {
 export default function App() {
   const disk = useDiskState(DEFAULT_CONFIG);
   const [editIdx, setEditIdx] = useState(null);
+  const [confirmReset, setConfirmReset] = useState(false);
+
+  const handleReset = () => {
+    disk.reset();
+    setEditIdx(null);
+    setConfirmReset(false);
+  };
 
   const handleEdit = (i) => setEditIdx(i);
 
@@ -41,18 +48,52 @@ export default function App() {
     <div className="min-h-screen bg-disk-bg p-6 md:px-4">
       {/* Header */}
       <div className="max-w-[900px] mx-auto mb-7">
-        <div className="flex items-center gap-2.5 mb-1">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-blue-500 to-violet-500 text-base">
-            ◫
+        <div className="flex items-center justify-between mb-1">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-blue-500 to-violet-500 text-base">
+              ◫
+            </div>
+            <h1 className="m-0 text-[22px] font-display font-bold text-slate-50 tracking-tight">
+              Disk Partition Visualizer
+            </h1>
           </div>
-          <h1 className="m-0 text-[22px] font-display font-bold text-slate-50 tracking-tight">
-            Disk Partition Visualizer
-          </h1>
+          <button
+            onClick={() => setConfirmReset(true)}
+            className="text-[11px] font-mono px-3 py-1.5 rounded-md border border-red-800 text-red-400 hover:bg-red-900/30 transition-colors"
+          >
+            Reset
+          </button>
         </div>
         <p className="m-0 text-[11px] text-slate-500 ml-[42px] font-mono">
           Interactive block-level partition layout · LBA addressing · Overlap detection
         </p>
       </div>
+
+      {/* Reset confirmation dialog */}
+      {confirmReset && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+          <div className="bg-disk-surface border border-disk-border rounded-xl p-6 max-w-sm w-full mx-4 shadow-xl">
+            <h2 className="text-slate-100 font-semibold text-base mb-2">Reset all data?</h2>
+            <p className="text-slate-400 text-[13px] mb-5">
+              This will clear all partitions and restore the default disk configuration.
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => setConfirmReset(false)}
+                className="text-[12px] font-mono px-4 py-1.5 rounded-md border border-disk-border text-slate-400 hover:bg-white/5 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleReset}
+                className="text-[12px] font-mono px-4 py-1.5 rounded-md bg-red-600 hover:bg-red-700 text-white transition-colors"
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="max-w-[900px] mx-auto">
         {/* Disk configuration */}
