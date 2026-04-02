@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import useDiskState from './hooks/useDiskState';
+import useCustomPresets from './hooks/useCustomPresets';
 import {
   PieChart,
   DiskBar,
@@ -23,8 +24,10 @@ const DEFAULT_CONFIG = {
 
 export default function App() {
   const disk = useDiskState(DEFAULT_CONFIG);
+  const { customPresets, savePreset, deletePreset } = useCustomPresets();
   const [editIdx, setEditIdx] = useState(null);
   const [confirmReset, setConfirmReset] = useState(false);
+  const [savePresetName, setSavePresetName] = useState(null);
 
   const handleReset = () => {
     disk.reset();
@@ -42,6 +45,19 @@ export default function App() {
   const handleLoadPreset = (preset) => {
     disk.loadPreset(preset);
     setEditIdx(null);
+  };
+
+  const handleSavePreset = () => setSavePresetName('');
+
+  const handleConfirmSavePreset = () => {
+    if (!savePresetName.trim()) return;
+    savePreset(savePresetName.trim(), {
+      diskSizeValue: disk.diskSizeValue,
+      diskSizeUnit: disk.diskSizeUnit,
+      sectorSize: disk.sectorSize,
+      partitions: disk.partitions,
+    });
+    setSavePresetName(null);
   };
 
   return (
@@ -89,6 +105,38 @@ export default function App() {
                 className="text-[12px] font-mono px-4 py-1.5 rounded-md bg-red-600 hover:bg-red-700 text-white transition-colors"
               >
                 Reset
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Save preset modal */}
+      {savePresetName !== null && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+          <div className="bg-disk-surface border border-disk-border rounded-xl p-6 max-w-sm w-full mx-4 shadow-xl">
+            <h2 className="text-slate-100 font-semibold text-base mb-2">Save preset</h2>
+            <input
+              autoFocus
+              value={savePresetName}
+              onChange={(e) => setSavePresetName(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') handleConfirmSavePreset(); if (e.key === 'Escape') setSavePresetName(null); }}
+              placeholder="Preset name"
+              className="w-full bg-[#0F172A] border border-slate-700 rounded-[5px] px-3 py-2 text-slate-200 font-mono text-xs outline-none focus:border-blue-500 mb-4"
+            />
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => setSavePresetName(null)}
+                className="text-[12px] font-mono px-4 py-1.5 rounded-md border border-disk-border text-slate-400 hover:bg-white/5 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmSavePreset}
+                disabled={!savePresetName.trim()}
+                className="text-[12px] font-mono px-4 py-1.5 rounded-md bg-blue-600 hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed text-white transition-colors"
+              >
+                Save
               </button>
             </div>
           </div>
@@ -157,7 +205,12 @@ export default function App() {
         />
 
         {/* Presets */}
-        <PresetBar onLoad={handleLoadPreset} />
+        <PresetBar
+          onLoad={handleLoadPreset}
+          customPresets={customPresets}
+          onSave={handleSavePreset}
+          onDelete={deletePreset}
+        />
 
         {/* Footer */}
         <div className="text-center mt-6 text-[9px] text-slate-700 font-mono">
