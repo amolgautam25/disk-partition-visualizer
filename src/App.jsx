@@ -51,7 +51,7 @@ export default function App() {
         <div className="flex items-center justify-between mb-1">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8">
-              <img src="/disk-partition-visualizer/favicon.svg" alt="logo" className="w-full h-full" />
+              <img src={`${import.meta.env.BASE_URL}favicon.svg`} alt="logo" className="w-full h-full" />
             </div>
             <h1 className="m-0 text-[22px] font-display font-bold text-slate-50 tracking-tight">
               Disk Partition Visualizer
