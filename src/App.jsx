@@ -50,8 +50,8 @@ export default function App() {
       <div className="max-w-[900px] mx-auto mb-7">
         <div className="flex items-center justify-between mb-1">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-blue-500 to-violet-500 text-base">
-              ◫
+            <div className="w-8 h-8">
+              <img src="/disk-partition-visualizer/favicon.svg" alt="logo" className="w-full h-full" />
             </div>
             <h1 className="m-0 text-[22px] font-display font-bold text-slate-50 tracking-tight">
               Disk Partition Visualizer
