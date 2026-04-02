@@ -1,25 +1,17 @@
 # 🗄️ Disk Partition Visualizer
 
-[![CI](https://github.com/YOUR_USERNAME/disk-partition-visualizer/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR_USERNAME/disk-partition-visualizer/actions/workflows/ci.yml)
+[![CI](https://github.com/amolgautam25/disk-partition-visualizer/actions/workflows/ci.yml/badge.svg)](https://github.com/amolgautam25/disk-partition-visualizer/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 An interactive, browser-based disk partition visualizer that renders real-time LBA block layouts, allocation pie charts, and overlap detection — inspired by Windows Disk Management.
 
-> **[Live Demo →](https://YOUR_USERNAME.github.io/disk-partition-visualizer)**
+> **[Live Demo →](https://amolgautam25.github.io/disk-partition-visualizer)**
 
 ---
 
 ## Screenshots
 
-<!-- Replace with actual screenshots after deploying -->
-
-| Allocation Chart | Block Layout (LBA) |
-|:---:|:---:|
-| ![Pie Chart](docs/pie-chart.png) | ![Block Layout](docs/block-layout.png) |
-
-| Overlap Detection | Presets |
-|:---:|:---:|
-| ![Overlap](docs/overlap.png) | ![Presets](docs/presets.png) |
+![Disk Partition Visualizer](https://github.com/user-attachments/assets/e79fe236-b6df-4461-918b-224dba6eb998)
 
 ---
 
@@ -37,19 +29,6 @@ An interactive, browser-based disk partition visualizer that renders real-time L
 
 ---
 
-## Tech Stack
-
-| Layer | Technology |
-|-------|-----------|
-| Framework | React 18 |
-| Build | Vite 6 |
-| Styling | Tailwind CSS 3 |
-| Charts | Custom SVG (zero chart library dependencies) |
-| Testing | Vitest + Testing Library |
-| CI/CD | GitHub Actions → GitHub Pages |
-
----
-
 ## Getting Started
 
 ### Prerequisites
@@ -60,7 +39,7 @@ An interactive, browser-based disk partition visualizer that renders real-time L
 ### Install & Run
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/disk-partition-visualizer.git
+git clone https://github.com/amolgautam25/disk-partition-visualizer.git
 cd disk-partition-visualizer
 npm install
 npm run dev
@@ -80,45 +59,6 @@ npm run test:watch # watch mode
 ```bash
 npm run build
 npm run preview    # preview the production build locally
-```
-
----
-
-## Project Structure
-
-```
-disk-partition-visualizer/
-├── .github/workflows/ci.yml    # CI + GitHub Pages deploy
-├── public/favicon.svg
-├── src/
-│   ├── components/
-│   │   ├── DiskBar.jsx         # Rectangular block layout with LBA ruler
-│   │   ├── DiskConfig.jsx      # Disk size / sector size configuration
-│   │   ├── Legend.jsx           # Pie chart color legend
-│   │   ├── PartitionForm.jsx   # Create / edit partition form
-│   │   ├── PartitionTable.jsx  # Partition detail rows with edit/delete
-│   │   ├── PieChart.jsx        # Donut allocation chart (pure SVG)
-│   │   └── PresetBar.jsx       # Quick preset buttons
-│   ├── hooks/
-│   │   └── useDiskState.js     # Central state management hook
-│   ├── presets/
-│   │   └── index.js            # GPT, MBR, Dual Boot, Overlap presets
-│   ├── utils/
-│   │   ├── constants.js        # Colors, sector sizes, unit multipliers
-│   │   ├── format.js           # formatSize(), formatBlocks()
-│   │   └── partition.js        # detectOverlaps(), buildSegments()
-│   ├── test/
-│   │   ├── setup.js
-│   │   ├── format.test.js
-│   │   └── partition.test.js
-│   ├── App.jsx
-│   ├── main.jsx
-│   └── index.css
-├── index.html
-├── vite.config.js
-├── tailwind.config.js
-├── package.json
-└── LICENSE
 ```
 
 ---
