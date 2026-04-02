@@ -11,6 +11,7 @@ export default function DiskConfig({
   sectorSize,
   setSectorSize,
   totalBlocks,
+  setTotalBlocks,
   diskBytes,
   allocatedBlocks,
   freeBlocks,
@@ -66,10 +67,13 @@ export default function DiskConfig({
 
         {/* Total blocks */}
         <div>
-          <div className={labelCls}>Total Blocks</div>
-          <div className="bg-[#0F172A] rounded-[5px] px-2.5 py-2 border border-disk-border font-mono text-[13px] font-bold text-blue-500 tracking-wide">
-            {totalBlocks.toLocaleString()}
-          </div>
+          <div className={labelCls}>Total Blocks (LBA)</div>
+          <input
+            value={totalBlocks}
+            onChange={(e) => setTotalBlocks(e.target.value)}
+            className={inputCls + ' font-bold text-blue-400'}
+            placeholder="0"
+          />
         </div>
       </div>
 
