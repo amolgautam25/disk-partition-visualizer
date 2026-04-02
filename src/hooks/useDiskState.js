@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import {
   SIZE_UNITS,
   detectOverlaps,
@@ -6,6 +6,16 @@ import {
   calcAllocatedBlocks,
   calcOverlapBlocks,
 } from '../utils';
+
+const STORAGE_KEY = 'diskPartitionState';
+
+function loadFromStorage(defaults) {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) return { ...defaults, ...JSON.parse(saved) };
+  } catch {}
+  return defaults;
+}
 
 /**
  * Central state hook for the disk partition visualizer.
@@ -21,10 +31,23 @@ export default function useDiskState(initialConfig = {}) {
     partitions: initPartitions = [],
   } = initialConfig;
 
-  const [diskSizeValue, setDiskSizeValue] = useState(initDiskSize);
-  const [diskSizeUnit, setDiskSizeUnit] = useState(initDiskUnit);
-  const [sectorSize, setSectorSize] = useState(initSectorSize);
-  const [partitions, setPartitions] = useState(initPartitions);
+  const saved = loadFromStorage({
+    diskSizeValue: initDiskSize,
+    diskSizeUnit: initDiskUnit,
+    sectorSize: initSectorSize,
+    partitions: initPartitions,
+  });
+
+  const [diskSizeValue, setDiskSizeValue] = useState(saved.diskSizeValue);
+  const [diskSizeUnit, setDiskSizeUnit] = useState(saved.diskSizeUnit);
+  const [sectorSize, setSectorSize] = useState(saved.sectorSize);
+  const [partitions, setPartitions] = useState(saved.partitions);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ diskSizeValue, diskSizeUnit, sectorSize, partitions }));
+    } catch {}
+  }, [diskSizeValue, diskSizeUnit, sectorSize, partitions]);
 
   // Derived values
   const diskBytes = useMemo(() => {
