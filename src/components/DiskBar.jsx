@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { UNALLOC_COLOR, OVERLAP_COLOR, PARTITION_COLORS } from '../utils';
 import { formatBlocks } from '../utils';
 
@@ -13,8 +13,11 @@ export default function DiskBar({ segments, totalBlocks, partitions }) {
   const [hovered, setHovered] = useState(null);
   const barRef = useRef(null);
   const scrollRef = useRef(null);
+  const minimapRef = useRef(null);
   const [tipPos, setTipPos] = useState({ x: 0, visible: false });
   const [zoom, setZoom] = useState(1);
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
 
   const handleMouse = (i, e) => {
     if (barRef.current) {
@@ -39,9 +42,32 @@ export default function DiskBar({ segments, totalBlocks, partitions }) {
   const zoomOut = () => setZoom((z) => Math.max(MIN_ZOOM, z - 1));
   const resetZoom = () => setZoom(1);
 
+  const scrollToMinimapPct = useCallback((clientX) => {
+    const minimap = minimapRef.current;
+    const scroll = scrollRef.current;
+    if (!minimap || !scroll) return;
+    const rect = minimap.getBoundingClientRect();
+    const clickPct = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+    const viewportHalf = 1 / (2 * zoom);
+    const newScrollPct = Math.max(0, Math.min(1, (clickPct - viewportHalf) / (1 - 1 / zoom)));
+    scroll.scrollLeft = newScrollPct * (scroll.scrollWidth - scroll.clientWidth);
+  }, [zoom]);
+
+  useEffect(() => {
+    if (!isDragging) return;
+    const onMove = (e) => scrollToMinimapPct(e.clientX);
+    const onUp = () => { setIsDragging(false); setHovered(null); };
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup', onUp);
+    };
+  }, [isDragging, scrollToMinimapPct]);
+
   // Visible LBA range for the ruler
   const scrollEl = scrollRef.current;
-  const scrollPct = scrollEl ? scrollEl.scrollLeft / (scrollEl.scrollWidth - scrollEl.clientWidth || 1) : 0;
+  const scrollPct = scrollEl ? scrollLeft / (scrollEl.scrollWidth - scrollEl.clientWidth || 1) : 0;
   const visibleBlocks = Math.floor(totalBlocks / zoom);
   const startLBA = Math.floor(scrollPct * (totalBlocks - visibleBlocks));
   const endLBA = Math.min(totalBlocks, startLBA + visibleBlocks);
@@ -94,6 +120,7 @@ export default function DiskBar({ segments, totalBlocks, partitions }) {
         ref={scrollRef}
         className="overflow-x-auto"
         onWheel={handleWheel}
+        onScroll={(e) => setScrollLeft(e.currentTarget.scrollLeft)}
         style={{ scrollbarWidth: zoom > 1 ? 'thin' : 'none' }}
       >
         {/* Main bar */}
@@ -132,7 +159,7 @@ export default function DiskBar({ segments, totalBlocks, partitions }) {
                   height: '100%',
                   background: bg,
                   borderRight: '1px solid #0F172A',
-                  opacity: hovered !== null && !isHov ? 0.6 : 1,
+                  opacity: !isDragging && hovered !== null && !isHov ? 0.6 : 1,
                   boxShadow: isHov ? 'inset 0 0 0 2px rgba(248,250,252,0.27)' : 'none',
                 }}
               >
@@ -177,23 +204,28 @@ export default function DiskBar({ segments, totalBlocks, partitions }) {
         <div className="mt-2">
           <div className="text-[8px] font-mono text-slate-700 mb-0.5">Overview</div>
           <div
-            className="flex w-full h-[10px] rounded overflow-hidden border border-slate-800"
+            ref={minimapRef}
+            className="relative w-full h-[10px] rounded overflow-hidden border border-slate-800 cursor-pointer select-none"
             style={{ background: UNALLOC_COLOR }}
+            onMouseDown={(e) => { setIsDragging(true); setHovered(null); scrollToMinimapPct(e.clientX); }}
           >
-            {segments.map((seg, i) => {
-              const pct = (seg.blocks / totalBlocks) * 100;
-              if (pct < 0.1) return null;
-              let bg;
-              if (seg.type === 'unallocated') bg = UNALLOC_COLOR;
-              else if (seg.type === 'overlap') bg = OVERLAP_COLOR;
-              else bg = seg.color;
-              return (
-                <div key={i} style={{ width: `${pct}%`, background: bg, opacity: 0.8 }} />
-              );
-            })}
+            {/* Segments */}
+            <div className="flex w-full h-full">
+              {segments.map((seg, i) => {
+                const pct = (seg.blocks / totalBlocks) * 100;
+                if (pct < 0.1) return null;
+                let bg;
+                if (seg.type === 'unallocated') bg = UNALLOC_COLOR;
+                else if (seg.type === 'overlap') bg = OVERLAP_COLOR;
+                else bg = seg.color;
+                return (
+                  <div key={i} style={{ width: `${pct}%`, background: bg, opacity: 0.8 }} />
+                );
+              })}
+            </div>
             {/* Viewport indicator */}
             <div
-              className="absolute h-[10px] border border-white/30 bg-white/5 pointer-events-none"
+              className="absolute top-0 h-full border border-white/50 bg-white/10 pointer-events-none"
               style={{
                 width: `${(1 / zoom) * 100}%`,
                 left: `${scrollPct * (1 - 1 / zoom) * 100}%`,
