@@ -10,9 +10,9 @@
 
 body {
   margin: 0;
-  background: #0b1120;
-  color: #e2e8f0;
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  background: #1c1c1e;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -21,14 +21,14 @@ body {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0b1120;
+  background: #1c1c1e;
 }
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #48484a;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: #636366;
 }
 
 /* Number input spinners — hide in Webkit */

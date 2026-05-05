@@ -5,17 +5,19 @@ export default {
     extend: {
       colors: {
         disk: {
-          bg: '#0B1120',
-          surface: '#111827',
-          border: '#1E293B',
-          'border-light': '#334155',
-          unalloc: '#1E293B',
-          overlap: '#DC2626',
+          bg: '#1c1c1e',
+          surface: '#2c2c2e',
+          border: '#3a3a3c',
+          'border-light': '#48484a',
+          unalloc: '#3a3a3c',
+          overlap: '#ff453a',
+          accent: '#0a84ff',
         },
       },
       fontFamily: {
-        mono: ['"IBM Plex Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
-        display: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
+        sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Text"', '"Helvetica Neue"', 'system-ui', 'sans-serif'],
+        mono: ['"SF Mono"', '"IBM Plex Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+        display: ['"Space Grotesk"', '-apple-system', 'system-ui', 'sans-serif'],
       },
     },
   },

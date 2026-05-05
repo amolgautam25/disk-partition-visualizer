@@ -1,8 +1,5 @@
 import { formatSize, formatBlocks, SECTOR_SIZES } from '../utils';
 
-/**
- * Configuration panel for disk size, sector size, and computed stats.
- */
 export default function DiskConfig({
   diskSizeValue,
   setDiskSizeValue,
@@ -19,17 +16,16 @@ export default function DiskConfig({
   overlapBlocks,
 }) {
   const inputCls =
-    'bg-[#0F172A] border border-slate-700 rounded-[5px] px-2.5 py-2 text-slate-200 font-mono text-xs outline-none w-full transition-colors focus:border-blue-500';
-  const labelCls = 'text-[9px] text-slate-500 uppercase tracking-wider mb-1 font-mono font-semibold';
+    'bg-disk-bg border border-disk-border rounded-lg px-2.5 py-2 text-white text-[13px] outline-none w-full transition-all focus:border-disk-accent focus:ring-1 focus:ring-[#0a84ff]/20';
+  const labelCls = 'text-[11px] text-[#8e8e9d] uppercase tracking-wider mb-1.5 font-medium';
 
   return (
-    <div className="bg-disk-surface rounded-[10px] p-5 mb-4 border border-disk-border">
-      <div className="text-[10px] text-slate-400 font-mono font-semibold uppercase tracking-wider mb-3.5">
+    <div className="bg-disk-surface rounded-xl p-5 mb-4 border border-disk-border">
+      <div className="text-[11px] text-[#8e8e9d] font-semibold uppercase tracking-widest mb-4">
         ⛁ Disk Configuration
       </div>
 
       <div className="grid grid-cols-[2fr_1fr_1fr] gap-3">
-        {/* Disk size */}
         <div>
           <div className={labelCls}>Disk Size</div>
           <div className="flex gap-1.5">
@@ -51,7 +47,6 @@ export default function DiskConfig({
           </div>
         </div>
 
-        {/* Sector size */}
         <div>
           <div className={labelCls}>Sector Size</div>
           <select
@@ -65,23 +60,21 @@ export default function DiskConfig({
           </select>
         </div>
 
-        {/* Total blocks */}
         <div>
           <div className={labelCls}>Total Blocks (LBA)</div>
           <input
             value={totalBlocks}
             onChange={(e) => setTotalBlocks(e.target.value)}
-            className={inputCls + ' font-bold text-blue-400'}
+            className={inputCls + ' font-mono font-bold text-disk-accent'}
             placeholder="0"
           />
         </div>
       </div>
 
-      {/* Stats row */}
-      <div className="flex gap-4 mt-3.5 flex-wrap text-[10px] font-mono">
-        <Stat label="Disk Size" value={formatSize(diskBytes)} color="#F8FAFC" />
-        <Stat label="Allocated" value={`${formatBlocks(allocatedBlocks)} blocks`} color="#10B981" />
-        <Stat label="Free" value={`${formatBlocks(freeBlocks)} blocks`} color="#F59E0B" />
+      <div className="flex gap-5 mt-4 flex-wrap text-[12px]">
+        <Stat label="Disk Size" value={formatSize(diskBytes)} color="#ffffff" />
+        <Stat label="Allocated" value={`${formatBlocks(allocatedBlocks)} blocks`} color="#30d158" />
+        <Stat label="Free" value={`${formatBlocks(freeBlocks)} blocks`} color="#ff9f0a" />
         <Stat
           label="Overlapping"
           value={
@@ -89,7 +82,7 @@ export default function DiskConfig({
               ? `${overlapBlocks.toLocaleString()} blocks (${overlaps.length} conflict${overlaps.length > 1 ? 's' : ''})`
               : 'None'
           }
-          color={overlaps.length > 0 ? '#DC2626' : '#475569'}
+          color={overlaps.length > 0 ? '#ff453a' : '#48484a'}
         />
       </div>
     </div>
@@ -99,8 +92,8 @@ export default function DiskConfig({
 function Stat({ label, value, color }) {
   return (
     <div>
-      <span className="text-slate-500">{label}: </span>
-      <span className="font-semibold" style={{ color }}>{value}</span>
+      <span className="text-[#636366]">{label}: </span>
+      <span className="font-mono font-semibold" style={{ color }}>{value}</span>
     </div>
   );
 }
