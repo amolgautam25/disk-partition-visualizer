@@ -2,13 +2,25 @@
  * Partition color palette. Each partition gets a color by index mod length.
  */
 export const PARTITION_COLORS = [
-  '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6',
-  '#EC4899', '#06B6D4', '#F97316', '#6366F1', '#14B8A6',
-  '#E11D48', '#7C3AED', '#0EA5E9', '#D946EF', '#84CC16',
+  '#0a84ff', // Blue
+  '#30d158', // Green
+  '#ff9f0a', // Orange
+  '#bf5af2', // Purple
+  '#ff453a', // Red
+  '#64d2ff', // Cyan
+  '#ffd60a', // Yellow
+  '#5e5ce6', // Indigo
+  '#ff375f', // Pink
+  '#32ade6', // Teal
+  '#ac8e68', // Brown
+  '#63e6e2', // Mint
+  '#ff6961', // Salmon
+  '#b4d455', // Lime
+  '#ff9500', // Amber
 ];
 
-export const UNALLOC_COLOR = '#1E293B';
-export const OVERLAP_COLOR = '#DC2626';
+export const UNALLOC_COLOR = '#3a3a3c';
+export const OVERLAP_COLOR = '#ff453a';
 
 /**
  * Available sector sizes in bytes.

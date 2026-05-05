@@ -1,9 +1,5 @@
 import { PARTITION_COLORS, OVERLAP_COLOR, formatBlocks, formatSize } from '../utils';
 
-/**
- * Detailed table of all partitions with LBA ranges, size, percentage, and
- * overlap indicators. Each partition can be edited or removed.
- */
 export default function PartitionTable({
   partitions,
   totalBlocks,
@@ -23,7 +19,7 @@ export default function PartitionTable({
         return (
           <div
             key={i}
-            className="flex items-center gap-2.5 py-1.5 border-b border-disk-border"
+            className="flex items-center gap-3 py-2 border-b border-disk-border"
           >
             <div
               className="w-2.5 h-2.5 rounded-sm shrink-0"
@@ -31,18 +27,18 @@ export default function PartitionTable({
             />
 
             <div className="flex-1 min-w-0">
-              <div className="text-[11px] font-semibold text-slate-200 flex items-center gap-1.5">
+              <div className="text-[13px] font-semibold text-white flex items-center gap-1.5">
                 {p.name}
                 {hasOverlap && (
                   <span
-                    className="text-[8px] rounded-sm px-1.5 py-px"
-                    style={{ color: OVERLAP_COLOR, background: '#DC262622' }}
+                    className="text-[9px] rounded px-1.5 py-px font-medium"
+                    style={{ color: OVERLAP_COLOR, background: '#ff453a22' }}
                   >
                     OVERLAP
                   </span>
                 )}
               </div>
-              <div className="text-[9px] text-slate-500 font-mono">
+              <div className="text-[11px] text-[#8e8e9d] font-mono mt-0.5">
                 LBA {p.startBlock.toLocaleString()} → {p.endBlock.toLocaleString()} ·{' '}
                 {formatBlocks(blocks)} blocks · {pct.toFixed(2)}% ·{' '}
                 {formatSize(blocks * sectorSize)}
@@ -51,13 +47,13 @@ export default function PartitionTable({
 
             <button
               onClick={() => onEdit(i)}
-              className="bg-transparent border border-slate-700 rounded px-2 py-0.5 text-slate-500 text-[9px] font-mono cursor-pointer hover:border-blue-500 hover:text-slate-300 transition-colors"
+              className="bg-transparent border border-disk-border rounded-md px-2.5 py-1 text-[#8e8e9d] text-[11px] cursor-pointer hover:border-disk-accent hover:text-white transition-colors"
             >
               Edit
             </button>
             <button
               onClick={() => onRemove(i)}
-              className="bg-transparent border border-slate-700 rounded px-2 py-0.5 text-red-500 text-[9px] font-mono cursor-pointer hover:border-red-500 hover:text-red-400 transition-colors"
+              className="bg-transparent border border-disk-border rounded-md px-2.5 py-1 text-[#ff453a] text-[11px] cursor-pointer hover:border-[#ff453a]/60 hover:bg-[#ff453a]/10 transition-colors"
             >
               ×
             </button>
@@ -66,7 +62,7 @@ export default function PartitionTable({
       })}
 
       {partitions.length === 0 && (
-        <div className="text-center py-6 text-slate-600 text-xs font-mono">
+        <div className="text-center py-8 text-[#48484a] text-[13px]">
           No partitions defined. Add one below or load a preset.
         </div>
       )}

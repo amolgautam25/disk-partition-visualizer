@@ -50,43 +50,43 @@ export default function App() {
       <div className="max-w-[900px] mx-auto mb-7">
         <div className="flex items-center justify-between mb-1">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8">
+            <div className="w-7 h-7">
               <img src={`${import.meta.env.BASE_URL}favicon.svg`} alt="logo" className="w-full h-full" />
             </div>
-            <h1 className="m-0 text-[22px] font-display font-bold text-slate-50 tracking-tight">
+            <h1 className="m-0 text-[20px] font-display font-bold text-white tracking-tight">
               Disk Partition Visualizer
             </h1>
           </div>
           <button
             onClick={() => setConfirmReset(true)}
-            className="text-[11px] font-mono px-3 py-1.5 rounded-md border border-red-800 text-red-400 hover:bg-red-900/30 transition-colors"
+            className="text-[12px] px-3 py-1.5 rounded-lg border border-[#3a3a3c] text-[#ff453a] hover:bg-[#ff453a]/10 hover:border-[#ff453a]/50 transition-colors"
           >
             Reset
           </button>
         </div>
-        <p className="m-0 text-[11px] text-slate-500 ml-[42px] font-mono">
+        <p className="m-0 text-[11px] text-[#48484a] ml-[38px] font-mono">
           Interactive block-level partition layout · LBA addressing · Overlap detection
         </p>
       </div>
 
       {/* Reset confirmation dialog */}
       {confirmReset && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-          <div className="bg-disk-surface border border-disk-border rounded-xl p-6 max-w-sm w-full mx-4 shadow-xl">
-            <h2 className="text-slate-100 font-semibold text-base mb-2">Reset all data?</h2>
-            <p className="text-slate-400 text-[13px] mb-5">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 backdrop-blur-sm">
+          <div className="bg-disk-surface border border-disk-border rounded-2xl p-6 max-w-sm w-full mx-4 shadow-2xl">
+            <h2 className="text-white font-semibold text-[15px] mb-2">Reset all data?</h2>
+            <p className="text-[#8e8e9d] text-[13px] mb-5 leading-relaxed">
               This will clear all partitions and restore the default disk configuration.
             </p>
             <div className="flex gap-3 justify-end">
               <button
                 onClick={() => setConfirmReset(false)}
-                className="text-[12px] font-mono px-4 py-1.5 rounded-md border border-disk-border text-slate-400 hover:bg-white/5 transition-colors"
+                className="text-[13px] px-4 py-1.5 rounded-lg border border-disk-border text-[#8e8e9d] hover:bg-white/5 transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleReset}
-                className="text-[12px] font-mono px-4 py-1.5 rounded-md bg-red-600 hover:bg-red-700 text-white transition-colors"
+                className="text-[13px] px-4 py-1.5 rounded-lg bg-[#ff453a] hover:bg-[#ff6961] text-white transition-colors font-medium"
               >
                 Reset
               </button>
@@ -96,7 +96,6 @@ export default function App() {
       )}
 
       <div className="max-w-[900px] mx-auto">
-        {/* Disk configuration */}
         <DiskConfig
           diskSizeValue={disk.diskSizeValue}
           setDiskSizeValue={disk.setDiskSizeValue}
@@ -113,20 +112,20 @@ export default function App() {
           overlapBlocks={disk.overlapBlocks}
         />
 
-        {/* Visualizations: pie chart + disk bar */}
+        {/* Visualizations */}
         <div className="grid grid-cols-[280px_1fr] gap-4 mb-4 max-lg:grid-cols-1">
           {/* Pie chart panel */}
-          <div className="bg-disk-surface rounded-[10px] p-4 border border-disk-border flex flex-col items-center">
-            <div className="text-[10px] text-slate-400 font-mono font-semibold uppercase tracking-wider mb-2.5 self-start">
-              ◔ Allocation Chart
+          <div className="bg-disk-surface rounded-xl p-4 border border-disk-border flex flex-col items-center">
+            <div className="text-[11px] text-[#8e8e9d] font-semibold uppercase tracking-widest mb-3 self-start">
+              ◔ Allocation
             </div>
             <PieChart segments={disk.segments} totalBlocks={disk.totalBlocks} />
             <Legend segments={disk.segments} totalBlocks={disk.totalBlocks} />
           </div>
 
           {/* Disk bar panel */}
-          <div className="bg-disk-surface rounded-[10px] p-4 border border-disk-border">
-            <div className="text-[10px] text-slate-400 font-mono font-semibold uppercase tracking-wider mb-3">
+          <div className="bg-disk-surface rounded-xl p-4 border border-disk-border">
+            <div className="text-[11px] text-[#8e8e9d] font-semibold uppercase tracking-widest mb-3">
               ▭ Block Layout (LBA)
             </div>
             <DiskBar
@@ -145,7 +144,6 @@ export default function App() {
           </div>
         </div>
 
-        {/* Create / edit partition */}
         <PartitionForm
           partitions={disk.partitions}
           overlaps={disk.overlaps}
@@ -156,12 +154,10 @@ export default function App() {
           setEditIdx={setEditIdx}
         />
 
-        {/* Presets */}
         <PresetBar onLoad={handleLoadPreset} />
 
-        {/* Footer */}
-        <div className="text-center mt-6 text-[9px] text-slate-700 font-mono">
-          Built by Amol · Interactive Disk Partition Visualizer
+        <div className="text-center mt-6 text-[10px] text-[#3a3a3c]">
+          Built by Amol · Disk Partition Visualizer
         </div>
       </div>
     </div>
