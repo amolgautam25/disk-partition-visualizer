@@ -25,11 +25,19 @@ export default function PartitionForm({
     }
   }, [editIdx, partitions]);
 
+  const start = parseInt(startBlock);
+  const end = parseInt(endBlock);
+
+  let boundsError = null;
+  if (!isNaN(start) && totalBlocks > 0 && start >= totalBlocks) {
+    boundsError = `Start block ${start.toLocaleString()} is beyond the disk end (LBA ${(totalBlocks - 1).toLocaleString()})`;
+  } else if (!isNaN(end) && totalBlocks > 0 && end >= totalBlocks) {
+    boundsError = `End block ${end.toLocaleString()} exceeds disk size — max is LBA ${(totalBlocks - 1).toLocaleString()}`;
+  }
+
   const handleSubmit = () => {
-    const start = parseInt(startBlock);
-    const end = parseInt(endBlock);
     const partName = name.trim() || `Partition ${partitions.length + 1}`;
-    if (isNaN(start) || isNaN(end) || start < 0 || end < start) return;
+    if (isNaN(start) || isNaN(end) || start < 0 || end < start || boundsError) return;
 
     const partition = { name: partName, startBlock: start, endBlock: end };
 
@@ -128,6 +136,13 @@ export default function PartitionForm({
           )}
         </div>
       </div>
+
+      {boundsError && (
+        <div className="mt-4 p-3 rounded-lg bg-[#ff9f0a]/10 border border-[#ff9f0a]/25">
+          <div className="text-[12px] font-semibold text-[#ff9f0a]">⚠ Out of Bounds</div>
+          <div className="text-[11px] text-[#ff9f0a]/80 font-mono mt-0.5">{boundsError}</div>
+        </div>
+      )}
 
       {overlaps.length > 0 && (
         <div className="mt-4 p-3 rounded-lg bg-[#ff453a]/10 border border-[#ff453a]/25">
