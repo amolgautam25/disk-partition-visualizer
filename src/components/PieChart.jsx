@@ -12,9 +12,7 @@ export default function PieChart({ segments, totalBlocks }) {
   const ir = 55;
   const [hovered, setHovered] = useState(null);
 
-  const allocated = segments.filter((s) => s.type !== 'unallocated');
-
-  if (allocated.length === 0) {
+  if (segments.length === 0) {
     return (
       <svg width={280} height={280} viewBox="0 0 280 280" role="img" aria-label="Empty disk — 100% unallocated">
         <circle cx={cx} cy={cy} r={r} fill={UNALLOC_COLOR} />
@@ -32,7 +30,7 @@ export default function PieChart({ segments, totalBlocks }) {
   const paths = [];
   let angle = -Math.PI / 2;
 
-  allocated.forEach((seg, i) => {
+  segments.forEach((seg, i) => {
     const frac = seg.blocks / totalBlocks;
     const sweep = frac * 2 * Math.PI;
     const startAngle = angle;
@@ -70,7 +68,7 @@ export default function PieChart({ segments, totalBlocks }) {
     angle = endAngle;
   });
 
-  const hovSeg = hovered !== null ? allocated[hovered] : null;
+  const hovSeg = hovered !== null ? segments[hovered] : null;
 
   return (
     <svg width={280} height={280} viewBox="0 0 280 280" role="img" aria-label="Disk allocation pie chart">
