@@ -11,8 +11,10 @@ export default function PartitionForm({
   setEditIdx,
 }) {
   const [name, setName] = useState('');
-  const [startBlock, setStartBlock] = useState('');
-  const [endBlock, setEndBlock] = useState('');
+  const [startBlock, setStartBlock] = useState('0');
+  const [endBlock, setEndBlock] = useState(() =>
+    totalBlocks > 0 ? (totalBlocks - 1).toString() : '999999'
+  );
 
   useEffect(() => {
     if (editIdx !== null && partitions[editIdx]) {
@@ -38,15 +40,15 @@ export default function PartitionForm({
       onAdd(partition);
     }
     setName('');
-    setStartBlock('');
-    setEndBlock('');
+    setStartBlock('0');
+    setEndBlock(totalBlocks > 0 ? (totalBlocks - 1).toString() : '999999');
   };
 
   const handleCancel = () => {
     setEditIdx(null);
     setName('');
-    setStartBlock('');
-    setEndBlock('');
+    setStartBlock('0');
+    setEndBlock(totalBlocks > 0 ? (totalBlocks - 1).toString() : '999999');
   };
 
   const handleKeyDown = (e) => {
